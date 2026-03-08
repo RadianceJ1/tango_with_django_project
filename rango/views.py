@@ -43,12 +43,21 @@ def index(request):
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
 
+    # ⭐ Chapter 10 test cookie
+    request.session.set_test_cookie()
+
     return render(request, 'rango/index.html', context=context_dict)
 
 
 def about(request):
     visitor_cookie_handler(request)
     context_dict = {'visits': request.session['visits']}
+
+    
+    if request.session.test_cookie_worked():
+        print("TEST COOKIE WORKED!")
+        request.session.delete_test_cookie()
+
     return render(request, 'rango/about.html', context=context_dict)
 
 
@@ -174,7 +183,6 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('rango:index'))
-
 
 
 @login_required
